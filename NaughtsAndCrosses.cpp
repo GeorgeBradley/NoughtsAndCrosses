@@ -3,9 +3,8 @@
 #include <map>
 #include <utility>
 
-void DisplayGrid(const std::vector<std::vector<std::pair<int, unsigned char>>>&Grid) {
-    
-    
+void DisplayGrid(const std::vector<std::vector<std::pair<int, unsigned char>>>&Grid) 
+{
     for (auto i = 0; i < Grid.size(); i++) {
         for (auto i2 = 0; i2 < Grid.size(); i2++) {
 
@@ -13,18 +12,18 @@ void DisplayGrid(const std::vector<std::vector<std::pair<int, unsigned char>>>&G
             {
                 std::cout << Grid.at(i).at(i2).second << "    ";
             }
-            else {
+            else 
+            {
                 std::cout << Grid.at(i).at(i2).first << "    ";
             }
         }
-        std::cout << std::endl;
-        std::cout << std::endl;
+        std::cout << "\n\n";
     }
-    std::cout << std::endl;
-   
+    std::cout << "\n";
 }
 
 bool CheckForAWinner(const std::vector<std::vector<std::pair<int, unsigned char>>>&Grid, const unsigned char key) {
+  
     if (Grid.at(0).at(0).second == key  && Grid.at(0).at(1).second == key && Grid.at(0).at(2).second == key) {
         std::cout << key << " is the winner" << std::endl;
         return true;
@@ -67,41 +66,41 @@ bool CheckForAWinner(const std::vector<std::vector<std::pair<int, unsigned char>
     }
 }
 
-void ClaimSquare(std::vector<std::vector<std::pair<int, unsigned char>>>& Grid, int iMove, const unsigned char player) {
-
-    
+bool ClaimSquare(std::vector<std::vector<std::pair<int, unsigned char>>>& Grid, int iMove, const unsigned char player) 
+{
     for (int iCount = 0; iCount < Grid.size(); iCount++)
     {
         for (int iCount2 = 0; iCount2 < Grid.size(); iCount2++)
         {
-            if (Grid.at(iCount).at(iCount2).second == '-') 
+            if (Grid.at(iCount).at(iCount2).first == iMove)
             {
-                if (Grid.at(iCount).at(iCount2).first == iMove) 
+                if (Grid.at(iCount).at(iCount2).second == '-')
                 {
                     Grid.at(iCount).at(iCount2).second = player;
+                    return true;
                 }
-                
-            }
-            else
-            {
-                std::cout << "This square has already been claimed. Choose a different square!" << std::endl;
-                
-            }
+                else
+                {
+                    std::cout << "This square has already been claimed. Choose a different square!" << std::endl;
+                    return false;
+                }
+            }     
         }
     }
-    
 }
 void PlayerMove(std::vector<std::vector<std::pair<int, unsigned char>>>& Grid, unsigned char player) {
     int iMove = 0;
-    
-    std::cout << player << " turn: " << std::endl;
-    std::cout << "Enter a number on the grid: ";
-    std::cin >> iMove;
-    
-    ClaimSquare(Grid, iMove, player);
-    
-    DisplayGrid(Grid);
-   
+    bool bExit = false;
+    do 
+    {
+        iMove = 0;
+        DisplayGrid(Grid);
+        std::cout << player << " turn: " << std::endl;
+        std::cout << "Enter a number on the grid: ";
+       std::cin >> iMove;
+        bExit = ClaimSquare(Grid, iMove, player);
+
+    } while (bExit == false);
 }
 void PlayNoughtsAndCrosses() {
 
@@ -112,18 +111,18 @@ void PlayNoughtsAndCrosses() {
     std::vector<std::vector<std::pair<int, unsigned char>>>Grid =
     {
         {std::make_pair(1,'-'), std::make_pair(2,'-'), std::make_pair(3,'-') },
+
         {std::make_pair(4,'-'), std::make_pair(5,'-'), std::make_pair(6,'-') },
+
         {std::make_pair(7,'-'), std::make_pair(8,'-'), std::make_pair(9,'-') }
+
     };
 
-    
-    DisplayGrid(Grid);
     do 
     {
-        system("cls");
         PlayerMove(Grid, player1);
-
-        if (CheckForAWinner(Grid, player1)) {
+        if (CheckForAWinner(Grid, player1)) 
+        {
             break;
         }
         PlayerMove(Grid, player2);
@@ -133,5 +132,13 @@ void PlayNoughtsAndCrosses() {
 }
 int main()
 {
-    PlayNoughtsAndCrosses();
+    unsigned char response = 0;
+    std::cout << "Do you want to play a game of noughts and crosses?: ";
+    std::cin >> response;
+    response = tolower(response);
+    if (response == 'y') 
+    {
+        PlayNoughtsAndCrosses();
+    }
+    
 }
